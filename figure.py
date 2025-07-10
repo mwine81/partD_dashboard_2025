@@ -100,7 +100,8 @@ def create_partd_figure(dataframe):
         gridwidth=1,
         gridcolor='lightgray',
         title_font=dict(size=14, color='#2c3e50'),
-        tickfont=dict(size=12, color='#2c3e50')
+        tickfont=dict(size=12, color='#2c3e50'),
+        dtick=1  # Show only whole year values
     )
     
     # Update primary y-axis (gross spending)
