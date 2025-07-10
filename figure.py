@@ -65,8 +65,8 @@ def create_partd_figure(dataframe):
     # Add gross spending (total_spending) as bars
     fig.add_trace(
         go.Bar(
-            x=df_sorted['year'],
-            y=df_sorted['total_spending'] / spending_scale,
+            x=df_sorted['year'].to_list(),
+            y=(df_sorted['total_spending'] / spending_scale).to_list(),
             name="Gross Spending",
             marker_color='#1f77b4',
             opacity=0.7,
@@ -80,8 +80,8 @@ def create_partd_figure(dataframe):
     # Add spending per claim as line
     fig.add_trace(
         go.Scatter(
-            x=df_sorted['year'],
-            y=df_sorted['per_claim'],
+            x=df_sorted['year'].to_list(),
+            y=df_sorted['per_claim'].to_list(),
             mode='lines+markers',
             name="Spending per Claim",
             line=dict(color='#ff7f0e', width=3),
