@@ -27,48 +27,50 @@ layout = dmc.Container(
         # Header Section - 46Brooklyn Style
         dmc.Paper(
             [
-                dmc.Stack(
+            dmc.Stack(
+                [
+                dmc.Group(
                     [
-                        dmc.Group(
-                            [
-                                dmc.Group(
-                                    [
-                                        dmc.Image(
-                                            src=get_asset_url("brooklyn-glasses-margin.png"),
-                                            h=50,
-                                            w="auto",
-                                            radius="sm",
-                                        ),
-                                        dmc.Title(
-                                            "Medicare Part D Drug Spending Dashboard",
-                                            order=1,
-                                            className="main-title",
-                                            style={"margin": 0, "alignSelf": "center"}
-                                        ),
-                                    ],
-                                    gap="md",
-                                    align="center",
-                                ),
-                                dmc.Text(
-                                    "Analyzing Medicare Part D spending trends with data from CMS",
-                                    className="subtitle",
-                                    style={"textAlign": "left", "marginTop": "0.5rem"}
-                                ),
-                                dmc.Group(
-                                    [
-                                        dmc.Badge("CMS Data", color="orange", variant="filled", size="lg"),
-                                        dmc.Badge("Interactive Dashboard", variant="outline", size="md", className="brooklyn-badge-outline"),
-                                    ],
-                                    gap="sm",
-                                ),
-                            ],
-                            justify="space-between",
-                            align="center",
-                            wrap="wrap",
+                    dmc.Group(
+                        [
+                 
+                        # DashIconify pill image
+                        DashIconify(
+                            icon="mdi:pill",
+                            width=48,
+                            color="#ed8936",
+                            style={"marginLeft": "1rem", "marginRight": "1rem"},
                         ),
+                        dmc.Title(
+                            "Medicare Part D Drug Spending Dashboard",
+                            order=1,
+                            className="main-title",
+                            style={"margin": 0, "alignSelf": "center"}
+                        ),
+                        ],
+                        gap="md",
+                        align="center",
+                    ),
+                    dmc.Text(
+                        "Analyzing Medicare Part D spending trends with data from CMS",
+                        className="subtitle",
+                        style={"textAlign": "left", "marginTop": "0.5rem"}
+                    ),
+                    dmc.Group(
+                        [
+                        dmc.Badge("CMS Data", color="orange", variant="filled", size="lg"),
+                        dmc.Badge("Interactive Dashboard", variant="outline", size="md", className="brooklyn-badge-outline"),
+                        ],
+                        gap="sm",
+                    ),
                     ],
-                    gap="md",
+                    justify="space-between",
+                    align="center",
+                    wrap="wrap",
                 ),
+                ],
+                gap="md",
+            ),
             ],
             className="header-section",
             p="xl",
