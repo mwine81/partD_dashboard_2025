@@ -6,7 +6,7 @@ Medicare Part D drug spending data from CMS.
 """
 
 import dash_mantine_components as dmc
-from dash import Dash, Input, Output, State, callback, dcc, html
+from dash import Dash, Input, Output, State, callback, dcc, html, get_asset_url
 from ag_grid_definition import component
 import polars as pl
 from dash.exceptions import PreventUpdate
@@ -34,7 +34,7 @@ layout = dmc.Container(
                                 dmc.Group(
                                     [
                                         dmc.Image(
-                                            src="/assets/brooklyn-glasses-margin.png",
+                                            src=get_asset_url("brooklyn-glasses-margin.png"),
                                             h=50,
                                             w="auto",
                                             radius="sm",
