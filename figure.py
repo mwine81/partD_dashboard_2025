@@ -7,14 +7,20 @@ from plotly.subplots import make_subplots
 
 
 def aggregate_chart_data(data):
+    """Aggregate data for chart visualization"""
+    
     return (
-    data
-    .group_by('year')
-    .agg(cs.matches('(?i)total.*(spending|claims)').sum())
-    .with_columns(
-        # spending per claim
-        (c.total_spending / c.total_claims).alias('per_claim'),
-    )
+        data
+        .group_by('YEAR')
+        .agg([
+            c.Total_Spending.sum().alias('total_spending'),
+            c.Total_Claims.sum().alias('total_claims')
+        ])
+        .with_columns(
+            # spending per claim
+            (c.total_spending / c.total_claims).alias('per_claim'),
+            c.YEAR.alias('year')
+        )
     )
 
 def create_partd_figure(dataframe):

@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.parquet
+.env
+.venv/
+.DS_Store
+*.sqlite3
+*.db
+.ipynb_checkpoints/
+assets/brooklyn-glasses-margin.png
+
+style.md
