@@ -197,7 +197,7 @@ layout = dmc.Container(
                                 dmc.List(
                                     [
                                         dmc.ListItem("Brand vs. Generic drug classifications using comprehensive pharmaceutical databases"),
-                                        dmc.ListItem("Specialty drug flags based on CMS definition (>$830 per month treatment cost)"),
+                                        dmc.ListItem("Specialty drug flags based on CMS definition"),
                                         dmc.ListItem("Historical data preservation extending back to 2013 for trend analysis"),
                                         dmc.ListItem("Standardized format conversion from CMS Excel spreadsheets"),
                                     ],
