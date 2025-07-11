@@ -7,11 +7,15 @@ Medicare Part D drug spending data from CMS.
 
 import dash_mantine_components as dmc
 from dash import Dash, Input, Output, State, callback, dcc, html, get_asset_url
+import dash_ag_grid as dag
 from ag_grid_definition import component
 import polars as pl
 from dash.exceptions import PreventUpdate
 from figure import create_partd_figure, aggregate_chart_data
 from dash_iconify import DashIconify
+from helpers import load_data
+import io
+import csv
 
 app = Dash(
     external_stylesheets=dmc.styles.ALL,
@@ -226,6 +230,7 @@ layout = dmc.Container(
                                 dmc.ListItem("The chart automatically updates to show trends for your selected data"),
                                 dmc.ListItem("Click column headers in the table to sort by different metrics"),
                                 dmc.ListItem("Use the search and filter options to focus on specific drugs or categories"),
+                                dmc.ListItem("Download filtered data as CSV using the 'Download CSV' button in the table header"),
                                 dmc.ListItem("Export chart images using the toolbar in the top-right of the chart"),
                             ],
                             size="sm",
@@ -454,7 +459,7 @@ layout = dmc.Container(
             className="partd-chart-container",
         ),
         
-        # Data Table Section - Professional Header
+        # Data Table Section - Professional Header with Download
         dmc.Paper(
             [
                 dmc.Stack(
@@ -474,7 +479,23 @@ layout = dmc.Container(
                                     ],
                                     gap="sm",
                                 ),
-                                dmc.Badge("Filter & Sort", color="orange", variant="light"),
+                                dmc.Group(
+                                    [
+                                        dmc.Badge("Filter & Sort", color="orange", variant="light"),
+                                        dmc.Button(
+                                            [
+                                                DashIconify(icon="tabler:download", width=16),
+                                                "Download CSV"
+                                            ],
+                                            variant="light",
+                                            color="gray",
+                                            size="sm",
+                                            id="download-button",
+                                            style={"color": "white", "backgroundColor": "rgba(255,255,255,0.2)"},
+                                        ),
+                                    ],
+                                    gap="sm",
+                                ),
                             ],
                             justify="space-between",
                             align="center",
@@ -490,6 +511,9 @@ layout = dmc.Container(
         
         # AG Grid Component
         html.Div([component], className="brooklyn-card", style={"marginTop": 0, "paddingTop": 0}),
+        
+        # Download Component
+        dcc.Download(id="download-csv"),
         
         
         
@@ -581,6 +605,34 @@ def open_insights_modal(n_clicks):
 )
 def open_data_sources_modal(n_clicks):
     return True
+
+# Download callback
+@callback(
+    Output("download-csv", "data"),
+    Input("download-button", "n_clicks"),
+    State("ag-grid", "virtualRowData"),
+    prevent_initial_call=True,
+)
+def download_csv(n_clicks, virtual_row_data):
+    if n_clicks is None:
+        raise PreventUpdate
+    
+    # If there's filtered data, use that; otherwise use all data
+    if virtual_row_data:
+        df = pl.DataFrame(virtual_row_data, strict=False)
+    else:
+        df = load_data().collect()
+    
+    # Convert to pandas for easier CSV export
+    df_pandas = df.to_pandas()
+    
+    # Create CSV string
+    csv_string = df_pandas.to_csv(index=False)
+    
+    return dict(
+        content=csv_string,
+        filename="medicare_partd_drug_spending.csv"
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)
