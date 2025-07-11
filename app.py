@@ -35,7 +35,7 @@ layout = dmc.Container(
                         [
                         # Brooklyn logo instead of pill icon
                         dmc.Image(
-                            src="assets/brooklyn-glasses-margin.png",
+                            src="/assets/brooklyn-glasses-margin.png",
                             alt="46Brooklyn Logo",
                             w=60,
                             h=60,
