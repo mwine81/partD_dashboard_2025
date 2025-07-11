@@ -109,27 +109,293 @@ layout = dmc.Container(
             mb="xl",
         ),
         
-        # Instructions Section
+        # Clean Navigation Section with Modal Triggers
         dmc.Paper(
             [
                 dmc.Group(
                     [
-                        DashIconify(icon="tabler:info-circle", width=20, color="#ed8936"),
-                        dmc.Text("How to Use This Dashboard", fw="bold", className="brooklyn-accent"),
+                        dmc.Button(
+                            [
+                                DashIconify(icon="tabler:info-circle", width=16),
+                                "About This Dashboard"
+                            ],
+                            variant="light",
+                            color="orange",
+                            size="sm",
+                            id="about-button",
+                            className="brooklyn-button",
+                        ),
+                        dmc.Button(
+                            [
+                                DashIconify(icon="tabler:help", width=16),
+                                "How to Use"
+                            ],
+                            variant="outline",
+                            color="blue",
+                            size="sm",
+                            id="help-button",
+                        ),
+                        dmc.Button(
+                            [
+                                DashIconify(icon="tabler:chart-analytics", width=16),
+                                "Key Insights"
+                            ],
+                            variant="outline",
+                            color="blue",
+                            size="sm",
+                            id="insights-button",
+                        ),
+                        dmc.Button(
+                            [
+                                DashIconify(icon="tabler:database", width=16),
+                                "Data Sources"
+                            ],
+                            variant="outline",
+                            color="blue",
+                            size="sm",
+                            id="data-sources-button",
+                        ),
                     ],
-                    gap="xs",
-                    mb="sm",
-                ),
-                dmc.Text(
-                    "Explore Medicare Part D drug spending data through the interactive table below. Filter and sort the data to analyze spending patterns, then view the dynamic chart that updates based on your selections.",
-                    size="sm",
-                    c="dark",
+                    gap="sm",
+                    justify="center",
                 ),
             ],
             p="md",
             radius="md",
-            className="brooklyn-paper-orange",
+            className="brooklyn-paper",
             mb="lg",
+            withBorder=True,
+        ),
+
+        # Modal Components
+        dmc.Modal(
+            title="About This Medicare Part D Analysis",
+            id="about-modal",
+            children=[
+                dmc.Stack(
+                    [
+                        dmc.Text(
+                            "This dashboard provides comprehensive analysis of Medicare Part D drug spending patterns from 2013-2023. "
+                            "We've enhanced the raw CMS data with additional classifications and insights to make it easier for "
+                            "researchers, policymakers, and the public to understand drug pricing trends in Medicare Part D.",
+                            size="sm",
+                        ),
+                        dmc.Divider(),
+                        dmc.Stack(
+                            [
+                                dmc.Group(
+                                    [
+                                        DashIconify(icon="tabler:database", width=20, color="#1a365d"),
+                                        dmc.Text("Data Enhancement Process", fw="bold", className="brooklyn-brand"),
+                                    ],
+                                    gap="xs",
+                                ),
+                                dmc.List(
+                                    [
+                                        dmc.ListItem("Brand vs. Generic drug classifications using comprehensive pharmaceutical databases"),
+                                        dmc.ListItem("Specialty drug flags based on CMS definition (>$830 per month treatment cost)"),
+                                        dmc.ListItem("Historical data preservation extending back to 2013 for trend analysis"),
+                                        dmc.ListItem("Standardized format conversion from CMS Excel spreadsheets"),
+                                    ],
+                                    size="sm",
+                                ),
+                            ],
+                            gap="xs",
+                        ),
+                    ],
+                    gap="md",
+                ),
+            ],
+            size="lg",
+        ),
+
+        dmc.Modal(
+            title="How to Use This Dashboard",
+            id="help-modal",
+            children=[
+                dmc.Stack(
+                    [
+                        dmc.Text(
+                            "This interactive dashboard allows you to explore Medicare Part D drug spending data through multiple views:",
+                            size="sm",
+                            fw="bold",
+                        ),
+                        dmc.List(
+                            [
+                                dmc.ListItem("Use the data table below to filter and sort drugs by various criteria"),
+                                dmc.ListItem("The chart automatically updates to show trends for your selected data"),
+                                dmc.ListItem("Click column headers in the table to sort by different metrics"),
+                                dmc.ListItem("Use the search and filter options to focus on specific drugs or categories"),
+                                dmc.ListItem("Export chart images using the toolbar in the top-right of the chart"),
+                            ],
+                            size="sm",
+                        ),
+                        dmc.Alert(
+                            "Pro Tip: Try filtering by drug type or specialty status to see how different categories contribute to overall spending trends.",
+                            title="Getting Started",
+                            color="blue",
+                            icon=DashIconify(icon="tabler:lightbulb"),
+                        ),
+                    ],
+                    gap="md",
+                ),
+            ],
+            size="md",
+        ),
+
+        dmc.Modal(
+            title="Key Insights from the Data",
+            id="insights-modal",
+            children=[
+                dmc.Grid(
+                    [
+                        dmc.GridCol(
+                            [
+                                dmc.Paper(
+                                    [
+                                        dmc.Stack(
+                                            [
+                                                dmc.Group(
+                                                    [
+                                                        DashIconify(icon="tabler:trending-up", width=24, color="#1a365d"),
+                                                        dmc.Text("Spending Trends", fw="bold", className="brooklyn-brand"),
+                                                    ],
+                                                    gap="xs",
+                                                ),
+                                                dmc.Text(
+                                                    "Track Medicare Part D spending growth over time and identify "
+                                                    "periods of significant change in drug costs and utilization patterns.",
+                                                    size="sm",
+                                                ),
+                                            ],
+                                            gap="xs",
+                                        ),
+                                    ],
+                                    p="md",
+                                    withBorder=True,
+                                    className="brooklyn-paper",
+                                ),
+                            ],
+                            span=6,
+                        ),
+                        dmc.GridCol(
+                            [
+                                dmc.Paper(
+                                    [
+                                        dmc.Stack(
+                                            [
+                                                dmc.Group(
+                                                    [
+                                                        DashIconify(icon="tabler:currency-dollar", width=24, color="#1a365d"),
+                                                        dmc.Text("Cost Per Claim", fw="bold", className="brooklyn-brand"),
+                                                    ],
+                                                    gap="xs",
+                                                ),
+                                                dmc.Text(
+                                                    "Analyze spending per claim trends to understand if cost increases "
+                                                    "are driven by higher drug prices or increased utilization.",
+                                                    size="sm",
+                                                ),
+                                            ],
+                                            gap="xs",
+                                        ),
+                                    ],
+                                    p="md",
+                                    withBorder=True,
+                                    className="brooklyn-paper",
+                                ),
+                            ],
+                            span=6,
+                        ),
+                    ],
+                    gutter="md",
+                ),
+            ],
+            size="lg",
+        ),
+
+        dmc.Modal(
+            title="Data Sources & Methodology",
+            id="data-sources-modal",
+            children=[
+                dmc.Stack(
+                    [
+                        dmc.Grid(
+                            [
+                                dmc.GridCol(
+                                    [
+                                        dmc.Stack(
+                                            [
+                                                dmc.Text("Primary Data Source", fw="bold", className="brooklyn-accent"),
+                                                dmc.Text(
+                                                    "Raw Medicare Part D spending data from the Centers for Medicare & Medicaid Services (CMS). "
+                                                    "We maintain historical data extending back to 2013, including datasets no longer available "
+                                                    "on the current CMS portal.",
+                                                    size="sm",
+                                                ),
+                                                dmc.Anchor(
+                                                    "CMS Medicare Part D Drug Spending Dashboard →",
+                                                    href="https://data.cms.gov/tools/medicare-part-d-drug-spending-dashboard",
+                                                    target="_blank",
+                                                    size="sm",
+                                                ),
+                                            ],
+                                            gap="xs",
+                                        ),
+                                    ],
+                                    span=6,
+                                ),
+                                dmc.GridCol(
+                                    [
+                                        dmc.Stack(
+                                            [
+                                                dmc.Text("Data Enhancement Process", fw="bold", className="brooklyn-accent"),
+                                                dmc.List(
+                                                    [
+                                                        dmc.ListItem("Converted CMS Excel spreadsheets to standardized format"),
+                                                        dmc.ListItem("Added drug type classifications (Brand, Generic, DME, Vaccine)"),
+                                                        dmc.ListItem("Flagged specialty drugs using CMS criteria (>$830/month)"),
+                                                        dmc.ListItem("Calculated cost per beneficiary using total spending divided by beneficiaries"),
+                                                    ],
+                                                    size="sm",
+                                                ),
+                                            ],
+                                            gap="xs",
+                                        ),
+                                    ],
+                                    span=6,
+                                ),
+                            ],
+                            gutter="md",
+                        ),
+                        dmc.Divider(),
+                        dmc.Group(
+                            [
+                                dmc.Group(
+                                    [
+                                        DashIconify(icon="tabler:calendar", width=16, color="#ed8936"),
+                                        dmc.Text("Update Frequency:", fw="bold", size="sm"),
+                                        dmc.Text("Annual (when CMS releases new data)", size="sm"),
+                                    ],
+                                    gap="xs",
+                                ),
+                                dmc.Group(
+                                    [
+                                        DashIconify(icon="tabler:calendar-range", width=16, color="#ed8936"),
+                                        dmc.Text("Coverage Period:", fw="bold", size="sm"),
+                                        dmc.Text("2013-2023 (11 years)", size="sm"),
+                                    ],
+                                    gap="xs",
+                                ),
+                            ],
+                            justify="space-between",
+                            wrap="wrap",
+                        ),
+                    ],
+                    gap="md",
+                ),
+            ],
+            size="xl",
         ),
 
         # Chart Section - Professional Header
@@ -227,39 +493,32 @@ layout = dmc.Container(
         
         
         
-        # Footer Section
+        # Clean Footer
         dmc.Paper(
             [
-                dmc.Stack(
+                dmc.Group(
                     [
-                        dmc.Group(
-                            [
-                                dmc.Text("Data Source:", size="sm", fw="bold", className="brooklyn-brand"),
-                                dmc.Anchor(
-                                    "CMS Medicare Part D Drug Spending Dashboard",
-                                    href="https://data.cms.gov/tools/medicare-part-d-drug-spending-dashboard",
-                                    target="_blank",
-                                    size="sm",
-                                    c="blue",
-                                ),
-                            ],
-                            gap="xs",
-                            align="center",
-                        ),
                         dmc.Text(
-                            "Dashboard inspired by 46brooklyn.com design principles for professional healthcare data visualization.",
+                            "Dashboard methodology inspired by 46brooklyn.com's approach to Medicare Part D data analysis.",
                             size="xs",
                             c="gray",
-                            ta="center",
+                        ),
+                        dmc.Anchor(
+                            "CMS Data Source",
+                            href="https://data.cms.gov/tools/medicare-part-d-drug-spending-dashboard",
+                            target="_blank",
+                            size="xs",
                         ),
                     ],
-                    gap="xs",
+                    justify="space-between",
+                    wrap="wrap",
                 ),
             ],
-            p="md",
+            p="sm",
             radius="md",
             className="brooklyn-paper",
-            mt="xl",
+            mt="lg",
+            style={"borderTop": "1px solid #e2e8f0"},
         ),
     ],
     size="xl",
@@ -289,6 +548,39 @@ def update_fig(virtual_row_data):
     data = aggregate_chart_data(data)
     fig = create_partd_figure(data)
     return fig
+
+# Modal callbacks
+@callback(
+    Output("about-modal", "opened"),
+    Input("about-button", "n_clicks"),
+    prevent_initial_call=True,
+)
+def open_about_modal(n_clicks):
+    return True
+
+@callback(
+    Output("help-modal", "opened"),
+    Input("help-button", "n_clicks"),
+    prevent_initial_call=True,
+)
+def open_help_modal(n_clicks):
+    return True
+
+@callback(
+    Output("insights-modal", "opened"),
+    Input("insights-button", "n_clicks"),
+    prevent_initial_call=True,
+)
+def open_insights_modal(n_clicks):
+    return True
+
+@callback(
+    Output("data-sources-modal", "opened"),
+    Input("data-sources-button", "n_clicks"),
+    prevent_initial_call=True,
+)
+def open_data_sources_modal(n_clicks):
+    return True
 
 if __name__ == "__main__":
     app.run(debug=True)
