@@ -24,7 +24,7 @@ server = app.server
 # Create layout inspired by 46brooklyn design
 layout = dmc.Container(
     [
-        # Header Section - 46Brooklyn Style
+        # Header Section - Professional 46Brooklyn Style
         dmc.Paper(
             [
             dmc.Stack(
@@ -33,33 +33,61 @@ layout = dmc.Container(
                     [
                     dmc.Group(
                         [
-                 
-                        # DashIconify pill image
-                        DashIconify(
-                            icon="mdi:pill",
-                            width=48,
-                            color="#ed8936",
-                            style={"marginLeft": "1rem", "marginRight": "1rem"},
+                        # Brooklyn logo instead of pill icon
+                        dmc.Image(
+                            src="assets/brooklyn-glasses-margin.png",
+                            alt="46Brooklyn Logo",
+                            w=60,
+                            h=60,
+                            fit="contain",
+                            className="brooklyn-icon",
+                            style={"filter": "drop-shadow(0 2px 4px rgba(0,0,0,0.1))"}
                         ),
                         dmc.Title(
-                            "Medicare Part D Drug Spending Dashboard",
+                            "WHAT DRUGS COST IN MEDICARE PART D",
                             order=1,
-                            className="main-title",
-                            style={"margin": 0, "alignSelf": "center"}
+                            className="main-title brooklyn-brand",
+                            style={
+                                "margin": 0,
+                                "alignSelf": "center",
+                                "fontSize": "2.25rem",
+                                "fontWeight": 700,
+                                "letterSpacing": "-0.025em",
+                                "lineHeight": 1.2
+                            }
                         ),
                         ],
                         gap="md",
                         align="center",
                     ),
                     dmc.Text(
-                        "Analyzing Medicare Part D spending trends with data from CMS",
+                        "A comprehensive analysis of Medicare Part D drug spending patterns from 2013-2023",
                         className="subtitle",
-                        style={"textAlign": "left", "marginTop": "0.5rem"}
+                        style={
+                            "textAlign": "left",
+                            "marginTop": "0.5rem",
+                            "fontSize": "1.125rem",
+                            "color": "#4a5568",
+                            "fontWeight": 400,
+                            "lineHeight": 1.5
+                        }
                     ),
                     dmc.Group(
                         [
-                        dmc.Badge("CMS Data", color="orange", variant="filled", size="lg"),
-                        dmc.Badge("Interactive Dashboard", variant="outline", size="md", className="brooklyn-badge-outline"),
+                        dmc.Badge(
+                            "Medicare Research",
+                            variant="filled",
+                            size="lg",
+                            className="brooklyn-badge",
+                            style={"fontWeight": 600}
+                        ),
+                        dmc.Badge(
+                            "2013-2023 Data",
+                            variant="outline",
+                            size="lg",
+                            className="brooklyn-badge-outline",
+                            style={"fontWeight": 600}
+                        ),
                         ],
                         gap="sm",
                     ),
@@ -102,7 +130,7 @@ layout = dmc.Container(
             mb="lg",
         ),
 
-        # Chart Section
+        # Chart Section - Professional Header
         dmc.Paper(
             [
                 dmc.Stack(
@@ -114,7 +142,7 @@ layout = dmc.Container(
                                     [
                                         DashIconify(icon="tabler:chart-line", width=24, color="white"),
                                         dmc.Text(
-                                            "Spending Trends Visualization",
+                                            "Medicare Part D Spending Analysis",
                                             size="lg",
                                             fw="bold",
                                             className="brooklyn-card-header-title",
@@ -122,7 +150,7 @@ layout = dmc.Container(
                                     ],
                                     gap="sm",
                                 ),
-                                dmc.Badge("Auto-Updates", color="orange", variant="light"),
+                                dmc.Badge("Live Updates", color="orange", variant="light"),
                             ],
                             justify="space-between",
                             align="center",
@@ -158,7 +186,7 @@ layout = dmc.Container(
             className="partd-chart-container",
         ),
         
-        # Data Table Section
+        # Data Table Section - Professional Header
         dmc.Paper(
             [
                 dmc.Stack(
@@ -170,7 +198,7 @@ layout = dmc.Container(
                                     [
                                         DashIconify(icon="tabler:table", width=24, color="white"),
                                         dmc.Text(
-                                            "Medicare Part D Drug Data Explorer",
+                                            "Detailed Drug Spending Database",
                                             size="lg",
                                             fw="bold",
                                             className="brooklyn-card-header-title",
@@ -178,7 +206,7 @@ layout = dmc.Container(
                                     ],
                                     gap="sm",
                                 ),
-                                dmc.Badge("Interactive Table", color="orange", variant="light"),
+                                dmc.Badge("Filter & Sort", color="orange", variant="light"),
                             ],
                             justify="space-between",
                             align="center",

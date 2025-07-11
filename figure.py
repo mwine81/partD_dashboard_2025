@@ -68,8 +68,8 @@ def create_partd_figure(dataframe):
             x=df_sorted['year'].to_list(),
             y=(df_sorted['total_spending'] / spending_scale).to_list(),
             name="Gross Spending",
-            marker_color='#1f77b4',
-            opacity=0.7,
+            marker_color='#1a365d',
+            opacity=0.8,
             hovertemplate="<b>Year:</b> %{x}<br>" +
                          f"<b>Gross Spending:</b> $%{{y:.1f}}{spending_unit}<br>" +
                          "<extra></extra>"
@@ -84,8 +84,8 @@ def create_partd_figure(dataframe):
             y=df_sorted['per_claim'].to_list(),
             mode='lines+markers',
             name="Spending per Claim",
-            line=dict(color='#ff7f0e', width=3),
-            marker=dict(size=8, color='#ff7f0e'),
+            line=dict(color='#ed8936', width=3),
+            marker=dict(size=8, color='#ed8936'),
             hovertemplate="<b>Year:</b> %{x}<br>" +
                          "<b>Spending per Claim:</b> $%{y:.2f}<br>" +
                          "<extra></extra>"
@@ -111,8 +111,8 @@ def create_partd_figure(dataframe):
         showgrid=True,
         gridwidth=1,
         gridcolor='lightgray',
-        title_font=dict(size=14, color='#1f77b4'),
-        tickfont=dict(size=12, color='#1f77b4'),
+        title_font=dict(size=14, color='#1a365d'),
+        tickfont=dict(size=12, color='#1a365d'),
         tickformat='$.1f'
     )
     
@@ -120,42 +120,63 @@ def create_partd_figure(dataframe):
     fig.update_yaxes(
         title_text="Average Spending per Claim ($)",
         secondary_y=True,
-        title_font=dict(size=14, color='#ff7f0e'),
-        tickfont=dict(size=12, color='#ff7f0e'),
+        title_font=dict(size=14, color='#ed8936'),
+        tickfont=dict(size=12, color='#ed8936'),
         tickformat='$.2f'
     )
     
-    # Update layout for professional appearance
+    # Update layout for professional 46Brooklyn appearance
     fig.update_layout(
         title=dict(
-            text="Medicare Part D Drug Spending Dashboard",
+            text="Medicare Part D Drug Spending Trends (2013-2023)",
             x=0.5,
-            font=dict(size=20, color='#2c3e50', family='Arial Black')
+            font=dict(size=20, color='#1a365d', family='Source Sans Pro, Arial, sans-serif', weight='bold')
         ),
         plot_bgcolor='white',
-        paper_bgcolor='white',
+        paper_bgcolor='#f8fafc',
         showlegend=True,
         legend=dict(
             orientation="h",
             yanchor="bottom",
             y=1.02,
-            xanchor="right",
-            x=1,
-            font=dict(size=12, color='#2c3e50')
+            xanchor="center",
+            x=0.8,
+            font=dict(size=12, color='#1a365d', family='Source Sans Pro, Arial, sans-serif'),
+            bgcolor="rgba(255,255,255,0.8)",
+            bordercolor="#e2e8f0",
+            borderwidth=1
         ),
         margin=dict(l=80, r=80, t=100, b=80),
         height=600,
         hovermode='x unified',
-        font=dict(family='Arial, sans-serif')
+        font=dict(family='Inter, Arial, sans-serif'),
+        xaxis=dict(
+            showline=True,
+            linewidth=1,
+            linecolor='#e2e8f0',
+            mirror=True
+        ),
+        yaxis=dict(
+            showline=True,
+            linewidth=1,
+            linecolor='#e2e8f0',
+            mirror=True
+        ),
+        yaxis2=dict(
+            showline=True,
+            linewidth=1,
+            linecolor='#e2e8f0',
+            mirror=True
+        )
     )
     
-    # Add annotations for context
+    # Add professional data source annotation
     fig.add_annotation(
-        text="Data from https://data.cms.gov/tools/medicare-part-d-drug-spending-dashboard",
+        text="Data Source: CMS Medicare Part D Drug Spending Dashboard",
         xref="paper", yref="paper",
-        x=1, y=-0.1,
+        x=1, y=-0.12,
         xanchor='right', yanchor='top',
-        font=dict(size=10, color='gray'),
+        font=dict(size=10, color='#718096', family='Inter, Arial, sans-serif'),
         showarrow=False
     )
     
