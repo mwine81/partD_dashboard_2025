@@ -245,7 +245,7 @@ layout = dmc.Container(
                     gap="md",
                 ),
             ],
-            size="md",
+            size="xl",
         ),
 
         dmc.Modal(
@@ -316,7 +316,7 @@ layout = dmc.Container(
                     gutter="md",
                 ),
             ],
-            size="lg",
+            size="xl",
         ),
 
         dmc.Modal(
@@ -359,7 +359,7 @@ layout = dmc.Container(
                                                     [
                                                         dmc.ListItem("Converted CMS Excel spreadsheets to standardized format"),
                                                         dmc.ListItem("Added drug type classifications (Brand, Generic, DME, Vaccine)"),
-                                                        dmc.ListItem("Flagged specialty drugs using CMS criteria (>$830/month)"),
+                                                        dmc.ListItem("Flagged specialty drugs using CMS criteria"),
                                                         dmc.ListItem("Calculated cost per beneficiary using total spending divided by beneficiaries"),
                                                     ],
                                                     size="sm",
