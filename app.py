@@ -35,13 +35,15 @@ layout = dmc.Container(
                         [
                         # Brooklyn logo instead of pill icon
                         dmc.Image(
-                            src="/assets/brooklyn-glasses-margin.png",
+                            src="/assets/logo.png",
                             alt="46Brooklyn Logo",
-                            w=60,
-                            h=60,
+                            w=100,
+                            h=100,
                             fit="contain",
                             className="brooklyn-icon",
-                            style={"filter": "drop-shadow(0 2px 4px rgba(0,0,0,0.1))"}
+                            style={"filter": "drop-shadow(0 2px 4px rgba(0,0,0,0.1))"},
+                          
+                          
                         ),
                         dmc.Title(
                             "WHAT DRUGS COST IN MEDICARE PART D",
