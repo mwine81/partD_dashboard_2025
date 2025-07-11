@@ -19,7 +19,7 @@ import csv
 
 app = Dash(
     external_stylesheets=dmc.styles.ALL,
-    assets_folder='assets',
+   
     title="Medicare Part D Drug Spending Dashboard"
 )
 
@@ -28,89 +28,164 @@ server = app.server
 # Create layout inspired by 46brooklyn design
 layout = dmc.Container(
     [
-        # Header Section - Professional 46Brooklyn Style
+        # Header Section - Clean Minimalist Design
         dmc.Paper(
             [
-            dmc.Stack(
-                [
-                dmc.Group(
+                dmc.Stack(
                     [
-                    dmc.Group(
-                        [
-                        # Brooklyn logo instead of pill icon
-                        dmc.Image(
-                            src="/assets/logo.png",
-                            alt="46Brooklyn Logo",
-                            w=100,
-                            h=100,
-                            fit="contain",
-                            className="brooklyn-icon",
-                            style={"filter": "drop-shadow(0 2px 4px rgba(0,0,0,0.1))"},
-                          
-                          
+                        # Main Header Row
+                        dmc.Group(
+                            [
+                                # Left Side - Logo and Branding
+                                dmc.Group(
+                                    [
+                                        html.Img(
+                                            src=get_asset_url("logo2.png"),
+                                            style={
+                                                "height": "60px",
+                                                "width": "auto",
+                                                "objectFit": "contain"
+                                            }
+                                        ),
+                                        dmc.Stack(
+                                            [
+                                                dmc.Text(
+                                                    "Medicare Part D",
+                                                    size="xs",
+                                                    tt="uppercase",
+                                                    fw="bold",
+                                                    c="gray",
+                                                    style={"letterSpacing": "0.1em"}
+                                                ),
+                                                dmc.Title(
+                                                    "Drug Spending Analytics",
+                                                    order=2,
+                                                    style={
+                                                        "fontWeight": 600,
+                                                        "fontSize": "1.75rem",
+                                                        "lineHeight": 1.2,
+                                                        "margin": 0,
+                                                        "color": "#1a365d"
+                                                    }
+                                                ),
+                                            ],
+                                            gap=0,
+                                        ),
+                                    ],
+                                    gap="md",
+                                    align="center",
+                                ),
+                                
+                                # Right Side - Key Stats
+                                dmc.Group(
+                                    [
+                                        dmc.Stack(
+                                            [
+                                                dmc.Text("Data Period", size="xs", c="gray", ta="center"),
+                                                dmc.Text(
+                                                    "2013-2023", 
+                                                    size="lg", 
+                                                    fw="bold", 
+                                                    ta="center",
+                                                    style={"color": "#1a365d"}
+                                                ),
+                                            ],
+                                            gap=2,
+                                        ),
+                                        dmc.Divider(orientation="vertical", style={"height": "40px"}),
+                                        dmc.Stack(
+                                            [
+                                                dmc.Text("Data Source", size="xs", c="gray", ta="center"),
+                                                dmc.Text(
+                                                    "CMS", 
+                                                    size="lg", 
+                                                    fw="bold", 
+                                                    ta="center",
+                                                    style={"color": "#ed8936"}
+                                                ),
+                                            ],
+                                            gap=2,
+                                        ),
+                                        dmc.Divider(orientation="vertical", style={"height": "40px"}),
+                                        dmc.Stack(
+                                            [
+                                                dmc.Text("Records", size="xs", c="gray", ta="center"),
+                                                dmc.Text(
+                                                    "90K+", 
+                                                    size="lg", 
+                                                    fw="bold", 
+                                                    ta="center",
+                                                    style={"color": "#1a365d"}
+                                                ),
+                                            ],
+                                            gap=2,
+                                        ),
+                                    ],
+                                    gap="lg",
+                                    align="center",
+                                ),
+                            ],
+                            justify="space-between",
+                            align="center",
+                            wrap="wrap",
                         ),
-                        dmc.Title(
-                            "WHAT DRUGS COST IN MEDICARE PART D",
-                            order=1,
-                            className="main-title brooklyn-brand",
-                            style={
-                                "margin": 0,
-                                "alignSelf": "center",
-                                "fontSize": "2.25rem",
-                                "fontWeight": 700,
-                                "letterSpacing": "-0.025em",
-                                "lineHeight": 1.2
-                            }
+                        
+                        # Subtitle Section
+                        dmc.Text(
+                            "Comprehensive analysis of Medicare Part D drug spending patterns with enhanced CMS data classifications",
+                            size="md",
+                            c="gray",
+                            ta="center",
+                            style={"maxWidth": "700px", "margin": "0 auto"}
                         ),
-                        ],
-                        gap="md",
-                        align="center",
-                    ),
-                    dmc.Text(
-                        "A comprehensive analysis of Medicare Part D drug spending patterns from 2013-2023",
-                        className="subtitle",
-                        style={
-                            "textAlign": "left",
-                            "marginTop": "0.5rem",
-                            "fontSize": "1.125rem",
-                            "color": "#4a5568",
-                            "fontWeight": 400,
-                            "lineHeight": 1.5
-                        }
-                    ),
-                    dmc.Group(
-                        [
-                        dmc.Badge(
-                            "Medicare Research",
-                            variant="filled",
-                            size="lg",
-                            className="brooklyn-badge",
-                            style={"fontWeight": 600}
+                        
+                        # Status Indicators
+                        dmc.Group(
+                            [
+                                dmc.Badge(
+                                    [
+                                        DashIconify(icon="tabler:circle-check", width=12),
+                                        "Live Data"
+                                    ],
+                                    variant="dot",
+                                    color="green",
+                                    size="sm",
+                                ),
+                                dmc.Badge(
+                                    [
+                                        DashIconify(icon="tabler:shield-check", width=12),
+                                        "CMS Verified"
+                                    ],
+                                    variant="dot",
+                                    color="blue",
+                                    size="sm",
+                                ),
+                                dmc.Badge(
+                                    [
+                                        DashIconify(icon="tabler:clock", width=12),
+                                        "Updated 2024"
+                                    ],
+                                    variant="dot",
+                                    color="orange",
+                                    size="sm",
+                                ),
+                            ],
+                            justify="center",
+                            gap="lg",
                         ),
-                        dmc.Badge(
-                            "2013-2023 Data",
-                            variant="outline",
-                            size="lg",
-                            className="brooklyn-badge-outline",
-                            style={"fontWeight": 600}
-                        ),
-                        ],
-                        gap="sm",
-                    ),
                     ],
-                    justify="space-between",
-                    align="center",
-                    wrap="wrap",
+                    gap="md",
                 ),
-                ],
-                gap="md",
-            ),
             ],
-            className="header-section",
             p="xl",
-            radius="md",
-            withBorder=True,
-            mb="xl",
+            radius="lg",
+            withBorder=False,
+            mb="lg",
+            style={
+                "background": "linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #ffffff 100%)",
+                "boxShadow": "0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1)",
+                "border": "1px solid #e2e8f0",
+            }
         ),
         
         # Clean Navigation Section with Modal Triggers
