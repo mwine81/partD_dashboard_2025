@@ -163,7 +163,7 @@ layout = dmc.Container(
                                 dmc.Badge(
                                     [
                                         DashIconify(icon="tabler:clock", width=12),
-                                        "Updated 2024"
+                                        "Updated 2025"
                                     ],
                                     variant="dot",
                                     color="orange",
