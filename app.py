@@ -151,15 +151,15 @@ layout = dmc.Container(
                                     color="green",
                                     size="sm",
                                 ),
-                                dmc.Badge(
-                                    [
-                                        DashIconify(icon="tabler:shield-check", width=12),
-                                        "CMS Verified"
-                                    ],
-                                    variant="dot",
-                                    color="blue",
-                                    size="sm",
-                                ),
+                                # dmc.Badge(
+                                #     [
+                                #         DashIconify(icon="tabler:shield-check", width=12),
+                                #         "CMS Verified"
+                                #     ],
+                                #     variant="dot",
+                                #     color="blue",
+                                #     size="sm",
+                                # ),
                                 dmc.Badge(
                                     [
                                         DashIconify(icon="tabler:clock", width=12),
