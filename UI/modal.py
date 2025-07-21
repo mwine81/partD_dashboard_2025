@@ -71,92 +71,177 @@ class ModalContent:
     @staticmethod
     def how_to_use_modal_content():
         return dmc.Modal(
-            title="How to Use This Dashboard",
+            title="Dashboard User Guide",
             id="help-modal",
             children=[
                 dmc.Stack(
                     [
-                        dmc.Text(
-                            "This interactive dashboard allows you to explore Medicare Part D drug spending data through multiple views:",
-                            size="sm",
-                            fw="bold",
-                        ),
+                        # Professional header with overview
+                        dmc.Paper([
+                            dmc.Group([
+                                DashIconify(icon="tabler:dashboard", width=24, color="#1a365d"),
+                                dmc.Text("Dashboard Overview", fw="bold", size="lg", style={"color": "#1a365d"})
+                            ], gap="xs", mb="sm"),
+                            dmc.Text(
+                                "This professional analytics platform provides comprehensive insights into Medicare Part D drug spending data. Navigate through interactive visualizations and detailed datasets to explore prescription drug costs, beneficiary impacts, and spending trends across multiple dimensions.",
+                                size="sm",
+                                lh=1.6,
+                                style={"color": "#4a5568"}
+                            )
+                        ], p="lg", withBorder=True, radius="md", style={"backgroundColor": "#f7fafc", "borderColor": "#e2e8f0"}),
                         
-                        # Step-by-step guide
+                        # Professional workflow sections
+                        dmc.Grid([
+                            # Data Filtering Section
+                            dmc.GridCol([
+                                dmc.Paper([
+                                    dmc.Stack([
+                                        dmc.Group([
+                                            dmc.ThemeIcon(
+                                                DashIconify(icon="tabler:filter", width=18),
+                                                color="blue",
+                                                variant="light",
+                                                radius="xl"
+                                            ),
+                                            dmc.Text("Data Filtering", fw="bold", size="md")
+                                        ], gap="sm"),
+                                        dmc.Text("Apply targeted filters to focus your analysis:", size="sm", c="gray", mb="xs"),
+                                        dmc.List([
+                                            dmc.ListItem("Product Name: Filter by specific drug products"),
+                                            dmc.ListItem("Generic Name: Search by active ingredients"),
+                                            dmc.ListItem("Manufacturer: Analyze company-specific data"),
+                                            dmc.ListItem("Drug Type: Compare brand vs. generic spending"),
+                                            dmc.ListItem("Year Range: Examine temporal trends"),
+                                            dmc.ListItem("Specialty Status: Focus on high-cost medications")
+                                        ], size="sm", spacing="xs")
+                                    ], gap="sm")
+                                ], p="md", withBorder=True, radius="md", h="100%")
+                            ], span=6),
+                            
+                            # Data Exploration Section
+                            dmc.GridCol([
+                                dmc.Paper([
+                                    dmc.Stack([
+                                        dmc.Group([
+                                            dmc.ThemeIcon(
+                                                DashIconify(icon="tabler:table", width=18),
+                                                color="green",
+                                                variant="light",
+                                                radius="xl"
+                                            ),
+                                            dmc.Text("Data Exploration", fw="bold", size="md")
+                                        ], gap="sm"),
+                                        dmc.Text("Interact with the data table for detailed analysis:", size="sm", c="gray", mb="xs"),
+                                        dmc.List([
+                                            dmc.ListItem("Sort columns by clicking headers"),
+                                            dmc.ListItem("Use built-in column filters for refinement"),
+                                            dmc.ListItem("Select rows for focused examination"),
+                                            dmc.ListItem("View comprehensive drug spending metrics"),
+                                            dmc.ListItem("Navigate through paginated results"),
+                                            dmc.ListItem("Access detailed beneficiary impact data")
+                                        ], size="sm", spacing="xs")
+                                    ], gap="sm")
+                                ], p="md", withBorder=True, radius="md", h="100%")
+                            ], span=6),
+                            
+                            # Visualization Section
+                            dmc.GridCol([
+                                dmc.Paper([
+                                    dmc.Stack([
+                                        dmc.Group([
+                                            dmc.ThemeIcon(
+                                                DashIconify(icon="tabler:chart-line", width=18),
+                                                color="orange",
+                                                variant="light",
+                                                radius="xl"
+                                            ),
+                                            dmc.Text("Visual Analytics", fw="bold", size="md")
+                                        ], gap="sm"),
+                                        dmc.Text("Leverage interactive charts for trend analysis:", size="sm", c="gray", mb="xs"),
+                                        dmc.List([
+                                            dmc.ListItem("Dynamic charts update with filter changes"),
+                                            dmc.ListItem("Hover for detailed data point information"),
+                                            dmc.ListItem("Zoom and pan for focused examination"),
+                                            dmc.ListItem("Identify spending patterns and anomalies"),
+                                            dmc.ListItem("Compare multiple data series"),
+                                            dmc.ListItem("Export high-resolution chart images")
+                                        ], size="sm", spacing="xs")
+                                    ], gap="sm")
+                                ], p="md", withBorder=True, radius="md", h="100%")
+                            ], span=6),
+                            
+                            # Export & Reporting Section
+                            dmc.GridCol([
+                                dmc.Paper([
+                                    dmc.Stack([
+                                        dmc.Group([
+                                            dmc.ThemeIcon(
+                                                DashIconify(icon="tabler:download", width=18),
+                                                color="red",
+                                                variant="light",
+                                                radius="xl"
+                                            ),
+                                            dmc.Text("Export & Reporting", fw="bold", size="md")
+                                        ], gap="sm"),
+                                        dmc.Text("Generate reports and export data:", size="sm", c="gray", mb="xs"),
+                                        dmc.List([
+                                            dmc.ListItem("Download filtered data as CSV files"),
+                                            dmc.ListItem("Export includes metadata and timestamps"),
+                                            dmc.ListItem("Generate chart images for presentations"),
+                                            dmc.ListItem("Maintain data provenance information"),
+                                            dmc.ListItem("Access comprehensive data documentation"),
+                                            dmc.ListItem("Share reproducible analytical results")
+                                        ], size="sm", spacing="xs")
+                                    ], gap="sm")
+                                ], p="md", withBorder=True, radius="md", h="100%")
+                            ], span=6)
+                        ], gutter="md"),
+                        
+                        # Professional best practices section
                         dmc.Paper([
                             dmc.Stack([
                                 dmc.Group([
-                                    DashIconify(icon="tabler:list-numbers", width=20, color="#1a365d"),
-                                    dmc.Text("Step-by-Step Guide", fw="bold", style={"color": "#1a365d"})
-                                ], gap="xs"),
-                                
-                                dmc.Timeline([
-                                    dmc.TimelineItem([
-                                        dmc.Text("Use the filter controls to narrow down your data", fw="bold", size="sm"),
-                                        dmc.Text("Select products, manufacturers, years, or drug types to focus your analysis", size="xs", c="gray")
-                                    ], title="🔍 Step 1: Apply Filters"),
-                                    
-                                    dmc.TimelineItem([
-                                        dmc.Text("View results in the interactive data table", fw="bold", size="sm"),
-                                        dmc.Text("Sort columns, use built-in filters, and select rows for detailed analysis", size="xs", c="gray")
-                                    ], title="📊 Step 2: Explore Data"),
-                                    
-                                    dmc.TimelineItem([
-                                        dmc.Text("Analyze trends in the dynamic chart", fw="bold", size="sm"),
-                                        dmc.Text("Chart automatically updates to show spending patterns for your filtered data", size="xs", c="gray")
-                                    ], title="📈 Step 3: View Trends"),
-                                    
-                                    dmc.TimelineItem([
-                                        dmc.Text("Export your results", fw="bold", size="sm"),
-                                        dmc.Text("Download filtered data as CSV or export chart images for reports", size="xs", c="gray")
-                                    ], title="💾 Step 4: Export Data"),
-                                ], active=0, color="blue")
-                            ], gap="md")
-                        ], p="md", withBorder=True, radius="md", style={"backgroundColor": "#f8fafc"}),
+                                    DashIconify(icon="tabler:bulb", width=22, color="#ed8936"),
+                                    dmc.Text("Best Practices & Recommendations", fw="bold", size="md", style={"color": "#ed8936"})
+                                ], gap="sm"),
+                                dmc.Grid([
+                                    dmc.GridCol([
+                                        dmc.Stack([
+                                            dmc.Text("Analysis Workflow:", fw="bold", size="sm"),
+                                            dmc.Text("1. Start with broad filters to understand overall patterns", size="sm"),
+                                            dmc.Text("2. Progressively narrow filters for targeted analysis", size="sm"),
+                                            dmc.Text("3. Use the 'Reset Filters' function to return to baseline", size="sm"),
+                                            dmc.Text("4. Export findings with applied filters for documentation", size="sm")
+                                        ], gap="xs")
+                                    ], span=6),
+                                    dmc.GridCol([
+                                        dmc.Stack([
+                                            dmc.Text("Performance Tips:", fw="bold", size="sm"),
+                                            dmc.Text("• Filter by year range first for faster processing", size="sm"),
+                                            dmc.Text("• Use specialty drug filter for high-value analysis", size="sm"),
+                                            dmc.Text("• Combine manufacturer and product filters strategically", size="sm"),
+                                            dmc.Text("• Refresh the page if performance degrades", size="sm")
+                                        ], gap="xs")
+                                    ], span=6)
+                                ], gutter="md")
+                            ], gap="sm")
+                        ], p="lg", withBorder=True, radius="md", style={"backgroundColor": "#fffbf0", "borderColor": "#fed7aa"}),
                         
-                        # Quick tips
-                        dmc.Stack([
-                            dmc.Group([
-                                DashIconify(icon="tabler:lightbulb", width=20, color="#ed8936"),
-                                dmc.Text("Pro Tips", fw="bold", style={"color": "#ed8936"})
-                            ], gap="xs"),
-                            
-                            dmc.List([
-                                dmc.ListItem([
-                                    dmc.Text("💡 ", span=True, style={"fontSize": "1.1rem"}),
-                                    "Try filtering by specialty drugs to see high-cost medication trends"
-                                ]),
-                                dmc.ListItem([
-                                    dmc.Text("🔄 ", span=True, style={"fontSize": "1.1rem"}),
-                                    "Use the 'Reset Filters' button to quickly return to viewing all data"
-                                ]),
-                                dmc.ListItem([
-                                    dmc.Text("📋 ", span=True, style={"fontSize": "1.1rem"}),
-                                    "Click column headers in the table to sort by different metrics"
-                                ]),
-                                dmc.ListItem([
-                                    dmc.Text("🖼️ ", span=True, style={"fontSize": "1.1rem"}),
-                                    "Use the chart toolbar (top-right) to export high-quality images"
-                                ]),
-                                dmc.ListItem([
-                                    dmc.Text("🔍 ", span=True, style={"fontSize": "1.1rem"}),
-                                    "If no data appears, try broadening your filter selection"
-                                ]),
-                            ], size="sm")
-                        ], gap="xs"),
-                        
+                        # Call to action
                         dmc.Alert(
                             [
-                                dmc.Text("🚀 ", span=True, style={"fontSize": "1.2rem"}),
-                                dmc.Text("Getting Started: ", fw="bold", span=True),
-                                "Start by exploring a specific drug type or manufacturer to see focused spending patterns, then compare with other selections!"
+                                dmc.Group([
+                                    DashIconify(icon="tabler:rocket", width=20),
+                                    dmc.Text("Ready to Begin Analysis", fw="bold", span=True)
+                                ], gap="xs"),
+                                dmc.Text("Apply your first filter above to start exploring Medicare Part D spending patterns. The dashboard will automatically update all visualizations and data tables to reflect your selections.", mt="xs")
                             ],
-                            title="Quick Start Recommendation",
                             color="blue",
                             variant="light",
-                        ),
+                            radius="md"
+                        )
                     ],
-                    gap="md",
+                    gap="lg",
                 ),
             ],
             size="xl",
