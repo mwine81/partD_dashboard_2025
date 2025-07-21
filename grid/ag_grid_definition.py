@@ -21,9 +21,16 @@ columnDefs = [
 ]
 
 # AG Grid component with professional styling
-component = dag.AgGrid(
+def create_grid_component():
+    """
+    Create the AG Grid component with defined column definitions and data.
+    
+    Returns:
+        dag.AgGrid: Configured AG Grid component.
+    """
+    return dag.AgGrid(
     id="ag-grid",
-    rowData=load_data().collect().to_dicts(),
+    rowData=load_data().collect(engine='streaming').to_dicts(),
     columnDefs=columnDefs,
     className="ag-theme-alpine",
     style={"height": "600px"},
@@ -40,7 +47,7 @@ component = dag.AgGrid(
         "suppressExcelExport": False,
         "rowSelection": "multiple",
     }
-)
+    )
 
 
 
