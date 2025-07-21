@@ -6,11 +6,11 @@ Medicare Part D drug spending data from CMS.
 """
 
 import dash_mantine_components as dmc
-from dash import Dash, Input, Output, State, callback
-import dash
+from dash import Dash, Input, Output, State, callback, callback_context
 import polars as pl
+import pandas as pd
 from dash.exceptions import PreventUpdate
-from figures import create_partd_figure, aggregate_chart_data
+from figures.figure import create_partd_figure, aggregate_chart_data
 from helpers import load_data, load_filtered_data, get_filtered_data_for_grid
 from UI.layout import layout
 
@@ -62,7 +62,7 @@ def update_data_and_chart(apply_clicks, reset_clicks, product_name, generic_name
     """Update both grid data and chart based on applied filters"""
     
     # Determine which button was clicked (if any)
-    ctx = callback_context = dash.callback_context if 'dash' in globals() else None
+    ctx = callback_context
     
     # Reset filters if reset button was clicked
     if ctx and ctx.triggered and 'reset-filters-btn' in ctx.triggered[0]['prop_id']:
@@ -171,22 +171,33 @@ def download_csv(n_clicks, row_data):
     if n_clicks is None:
         raise PreventUpdate
     
-    # Use current grid data for download
-    if row_data:
-        df = pl.DataFrame(row_data)
-    else:
-        df = load_data().collect()
+    try:
+        # Use current grid data for download
+        if row_data and len(row_data) > 0:
+            # Convert list of dicts directly to pandas
+            df_pandas = pd.DataFrame(row_data)
+        else:
+            # Fallback to loading all data if no grid data
+            df = load_data().collect()
+            df_pandas = df.to_pandas()
+        
+        # Create CSV string
+        csv_string = df_pandas.to_csv(index=False)
+        
+        return dict(
+            content=csv_string,
+            filename="medicare_partd_drug_spending_filtered.csv",
+            type="text/csv"
+        )
     
-    # Convert to pandas for easier CSV export
-    df_pandas = df.to_pandas()
-    
-    # Create CSV string
-    csv_string = df_pandas.to_csv(index=False)
-    
-    return dict(
-        content=csv_string,
-        filename="medicare_partd_drug_spending_filtered.csv"
-    )
+    except Exception as e:
+        print(f"Error in CSV download: {e}")
+        # Return empty file as fallback
+        return dict(
+            content="Error generating CSV file",
+            filename="error.txt",
+            type="text/plain"
+        )
 
 if __name__ == "__main__":
     app.run(debug=True)
