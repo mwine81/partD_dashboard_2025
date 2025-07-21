@@ -1,5 +1,5 @@
 import dash_ag_grid as dag
-from helpers import load_data
+from helpers import load_data, get_filtered_data_for_grid
 
 
 # Column definitions with proper naming and formatting
@@ -21,26 +21,39 @@ columnDefs = [
 ]
 
 # AG Grid component with professional styling
-component = dag.AgGrid(
-    id="ag-grid",
-    rowData=load_data().collect().to_dicts(),
-    columnDefs=columnDefs,
-    className="ag-theme-alpine",
-    style={"height": "600px"},
-    dashGridOptions={
-        "pagination": True,
-        "paginationPageSize": 20,
-        "domLayout": "normal",
-        "defaultColDef": {
-            "resizable": True,
-            "sortable": True,
-            "filter": True,
-        },
-        "enableRangeSelection": True,
-        "suppressExcelExport": False,
-        "rowSelection": "multiple",
-    }
-)
+def create_grid_component(row_data=None):
+    """
+    Create the AG Grid component with defined column definitions and data.
+    
+    Args:
+        row_data: Optional row data. If None, loads all data.
+    
+    Returns:
+        dag.AgGrid: Configured AG Grid component.
+    """
+    if row_data is None:
+        row_data = load_data().collect().to_dicts()
+    
+    return dag.AgGrid(
+        id="ag-grid",
+        rowData=row_data,
+        columnDefs=columnDefs,
+        className="ag-theme-alpine",
+        style={"height": "600px"},
+        dashGridOptions={
+            "pagination": True,
+            "paginationPageSize": 20,
+            "domLayout": "normal",
+            "defaultColDef": {
+                "resizable": True,
+                "sortable": True,
+                "filter": True,
+            },
+            "enableRangeSelection": True,
+            "suppressExcelExport": False,
+            "rowSelection": "multiple",
+        }
+    )
 
 
 
