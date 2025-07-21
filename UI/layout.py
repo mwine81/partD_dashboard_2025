@@ -1,6 +1,5 @@
 import dash_mantine_components as dmc
 
-from grid.ag_grid_definition import create_grid_component
 from .header import header
 from .navigation import navigation
 from .modal import ModalContent
@@ -33,7 +32,7 @@ def layout():
         GridComponent.create_grid_header(),
         
         # AG Grid Component
-        GridComponent.create_grid_container(create_grid_component()),
+        GridComponent.create_grid_container(),
         
         # Download Component
         dcc.Download(id="download-csv"),

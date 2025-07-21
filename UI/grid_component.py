@@ -1,11 +1,13 @@
 import dash_mantine_components as dmc
 from dash_iconify import DashIconify
+import dash_ag_grid as dag
+from grid.ag_grid_definition import columnDefs
 
 class GridComponent:
     
     @staticmethod
     def create_grid_header():
-        return         dmc.Paper(
+        return dmc.Paper(
             [
                 dmc.Stack(
                     [
@@ -55,7 +57,29 @@ class GridComponent:
         )
     
     @staticmethod
-    def create_grid_container(component):
-        return dmc.Paper([component], className="brooklyn-card", style={"marginTop": 0, "paddingTop": 0})
+    def create_grid_container():
+        """Create the AG Grid container with dynamic data"""
+        return dmc.Paper([
+            dag.AgGrid(
+                id="ag-grid",
+                rowData=[],  # Will be populated by callback
+                columnDefs=columnDefs,
+                className="ag-theme-alpine",
+                style={"height": "600px"},
+                dashGridOptions={
+                    "pagination": True,
+                    "paginationPageSize": 20,
+                    "domLayout": "normal",
+                    "defaultColDef": {
+                        "resizable": True,
+                        "sortable": True,
+                        "filter": True,
+                    },
+                    "enableRangeSelection": True,
+                    "suppressExcelExport": False,
+                    "rowSelection": "multiple",
+                }
+            )
+        ], className="brooklyn-card", style={"marginTop": 0, "paddingTop": 0})
 
 

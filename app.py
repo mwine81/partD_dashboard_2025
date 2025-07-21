@@ -7,11 +7,13 @@ Medicare Part D drug spending data from CMS.
 
 import dash_mantine_components as dmc
 from dash import Dash, Input, Output, State, callback
+import dash
 import polars as pl
 from dash.exceptions import PreventUpdate
-from figure import create_partd_figure, aggregate_chart_data
-from helpers import load_data
+from figures import create_partd_figure, aggregate_chart_data
+from helpers import load_data, load_filtered_data, get_filtered_data_for_grid
 from UI.layout import layout
+
 
 app = Dash(
     external_stylesheets=dmc.styles.ALL,
@@ -23,26 +25,107 @@ server = app.server
 
 app.layout = dmc.MantineProvider(layout())
 
+# Helper function to build filters dictionary
+def build_filters_dict(product_name, generic_name, manufacturer, brand_generic_type, year_range, specialty_filter):
+    """Build filters dictionary from callback inputs"""
+    filters = {}
+    if product_name:
+        filters['product_name'] = product_name
+    if generic_name:
+        filters['generic_name'] = generic_name
+    if manufacturer:
+        filters['manufacturer'] = manufacturer
+    if brand_generic_type:
+        filters['brand_generic_type'] = brand_generic_type
+    if year_range:
+        filters['year_range'] = year_range
+    if specialty_filter:
+        filters['specialty_filter'] = specialty_filter
+    return filters
 
+# Main callback to update both grid and figure based on filters
 @callback(
-    Output('fig', 'figure'),
-    Input('ag-grid', 'virtualRowData')
+    [Output('ag-grid', 'rowData'),
+     Output('fig', 'figure')],
+    [Input('apply-filters-btn', 'n_clicks'),
+     Input('reset-filters-btn', 'n_clicks')],
+    [State('product-filter', 'value'),
+     State('generic-filter', 'value'),
+     State('manufacturer-filter', 'value'),
+     State('type-filter', 'value'),
+     State('year-range-slider', 'value'),
+     State('specialty-filter', 'value')],
+    prevent_initial_call=False
 )
-def update_fig(virtual_row_data):
-    if not virtual_row_data:
-        raise PreventUpdate
+def update_data_and_chart(apply_clicks, reset_clicks, product_name, generic_name, 
+                         manufacturer, brand_generic_type, year_range, specialty_filter):
+    """Update both grid data and chart based on applied filters"""
+    
+    # Determine which button was clicked (if any)
+    ctx = callback_context = dash.callback_context if 'dash' in globals() else None
+    
+    # Reset filters if reset button was clicked
+    if ctx and ctx.triggered and 'reset-filters-btn' in ctx.triggered[0]['prop_id']:
+        # Load all data when reset
+        filters = {}
+        filtered_data = load_data().collect()
+    else:
+        # Build filters dictionary
+        filters = build_filters_dict(product_name, generic_name, manufacturer, 
+                                   brand_generic_type, year_range, specialty_filter)
         
+        # Get filtered data
+        if filters:
+            filtered_data = load_filtered_data(
+                product_name=filters.get('product_name'),
+                generic_name=filters.get('generic_name'),
+                manufacturer=filters.get('manufacturer'),
+                brand_generic_type=filters.get('brand_generic_type'),
+                year_range=filters.get('year_range'),
+                specialty_filter=filters.get('specialty_filter')
+            ).collect()
+        else:
+            # No filters applied, load all data
+            filtered_data = load_data().collect()
+    
+    # Prepare data for AG Grid
+    grid_data = filtered_data.to_dicts()
+    
+    # Prepare data for chart
     try:
-        data = pl.DataFrame(
-            virtual_row_data, 
-            strict=False
-        )
+        chart_data = aggregate_chart_data(filtered_data)
+        figure = create_partd_figure(chart_data)
     except Exception as e:
-        print(f"Error updating visualizations: {e}")
-        raise PreventUpdate
-    data = aggregate_chart_data(data)
-    fig = create_partd_figure(data)
-    return fig
+        print(f"Error creating chart: {e}")
+        # Return empty figure if there's an error
+        import plotly.graph_objects as go
+        figure = go.Figure()
+        figure.update_layout(
+            title="No data available for current filters",
+            xaxis_title="Year",
+            yaxis_title="Total Spending"
+        )
+    
+    return grid_data, figure
+
+# Reset filters callback
+@callback(
+    [Output('product-filter', 'value'),
+     Output('generic-filter', 'value'),
+     Output('manufacturer-filter', 'value'),
+     Output('type-filter', 'value'),
+     Output('year-range-slider', 'value'),
+     Output('specialty-filter', 'value')],
+    Input('reset-filters-btn', 'n_clicks'),
+    prevent_initial_call=True
+)
+def reset_filters(n_clicks):
+    """Reset all filter values to their defaults"""
+    # Get min/max years for slider reset
+    from UI.select import get_min_and_max_years
+    min_year, max_year = get_min_and_max_years()
+    
+    return None, None, None, None, (min_year, max_year), "All"
 
 # Modal callbacks
 @callback(
@@ -77,20 +160,20 @@ def open_insights_modal(n_clicks):
 def open_data_sources_modal(n_clicks):
     return True
 
-# Download callback
+# Download callback - now uses current grid data
 @callback(
     Output("download-csv", "data"),
     Input("download-button", "n_clicks"),
-    State("ag-grid", "virtualRowData"),
+    State("ag-grid", "rowData"),
     prevent_initial_call=True,
 )
-def download_csv(n_clicks, virtual_row_data):
+def download_csv(n_clicks, row_data):
     if n_clicks is None:
         raise PreventUpdate
     
-    # If there's filtered data, use that; otherwise use all data
-    if virtual_row_data:
-        df = pl.DataFrame(virtual_row_data, strict=False)
+    # Use current grid data for download
+    if row_data:
+        df = pl.DataFrame(row_data)
     else:
         df = load_data().collect()
     
@@ -102,7 +185,7 @@ def download_csv(n_clicks, virtual_row_data):
     
     return dict(
         content=csv_string,
-        filename="medicare_partd_drug_spending.csv"
+        filename="medicare_partd_drug_spending_filtered.csv"
     )
 
 if __name__ == "__main__":
