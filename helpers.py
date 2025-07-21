@@ -15,7 +15,7 @@ def load_filtered_data(
     generic_name: Optional[List[str]] = None, 
     manufacturer: Optional[List[str]] = None,
     brand_generic_type: Optional[List[str]] = None,
-    year_range: Optional[Tuple[int, int]] = None,
+    year_filter: Optional[List[str]] = None,
     specialty_filter: Optional[str] = None
 ) -> pl.LazyFrame:
     """
@@ -26,7 +26,7 @@ def load_filtered_data(
         generic_name: Filter by generic name(s)
         manufacturer: Filter by manufacturer(s)
         brand_generic_type: Filter by brand/generic type(s)
-        year_range: Tuple of (min_year, max_year) for year filtering
+        year_filter: List of years to filter by (e.g., ['2020', '2021'])
         specialty_filter: 'All', 'Specialty Only', or 'Non-Specialty Only'
     
     Returns:
@@ -47,9 +47,10 @@ def load_filtered_data(
     if brand_generic_type:
         query = query.filter(c("Brand_vs_Generic").is_in(brand_generic_type))
     
-    if year_range and len(year_range) == 2:
-        min_year, max_year = year_range
-        query = query.filter(c("YEAR").is_between(min_year, max_year))
+    if year_filter:
+        # Convert string years to integers for filtering
+        year_ints = [int(year) for year in year_filter]
+        query = query.filter(c("YEAR").is_in(year_ints))
     
     if specialty_filter and specialty_filter != "All":
         if specialty_filter == "Specialty Only":
@@ -74,7 +75,7 @@ def get_filtered_data_for_grid(filters: dict) -> List[dict]:
         generic_name=filters.get('generic_name'),
         manufacturer=filters.get('manufacturer'),
         brand_generic_type=filters.get('brand_generic_type'),
-        year_range=filters.get('year_range'),
+        year_filter=filters.get('year_filter'),
         specialty_filter=filters.get('specialty_filter')
     )
     

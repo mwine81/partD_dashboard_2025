@@ -26,7 +26,7 @@ server = app.server
 app.layout = dmc.MantineProvider(layout())
 
 # Helper function to build filters dictionary
-def build_filters_dict(product_name, generic_name, manufacturer, brand_generic_type, year_range, specialty_filter):
+def build_filters_dict(product_name, generic_name, manufacturer, brand_generic_type, year_filter, specialty_filter):
     """Build filters dictionary from callback inputs"""
     filters = {}
     if product_name:
@@ -37,8 +37,8 @@ def build_filters_dict(product_name, generic_name, manufacturer, brand_generic_t
         filters['manufacturer'] = manufacturer
     if brand_generic_type:
         filters['brand_generic_type'] = brand_generic_type
-    if year_range:
-        filters['year_range'] = year_range
+    if year_filter:
+        filters['year_filter'] = year_filter
     if specialty_filter:
         filters['specialty_filter'] = specialty_filter
     return filters
@@ -53,12 +53,12 @@ def build_filters_dict(product_name, generic_name, manufacturer, brand_generic_t
      State('generic-filter', 'value'),
      State('manufacturer-filter', 'value'),
      State('type-filter', 'value'),
-     State('year-range-slider', 'value'),
+     State('year-filter', 'value'),
      State('specialty-filter', 'value')],
     prevent_initial_call=False
 )
 def update_data_and_chart(apply_clicks, reset_clicks, product_name, generic_name, 
-                         manufacturer, brand_generic_type, year_range, specialty_filter):
+                         manufacturer, brand_generic_type, year_filter, specialty_filter):
     """Update both grid data and chart based on applied filters"""
     
     # Determine which button was clicked (if any)
@@ -72,7 +72,7 @@ def update_data_and_chart(apply_clicks, reset_clicks, product_name, generic_name
     else:
         # Build filters dictionary
         filters = build_filters_dict(product_name, generic_name, manufacturer, 
-                                   brand_generic_type, year_range, specialty_filter)
+                                   brand_generic_type, year_filter, specialty_filter)
         
         # Get filtered data
         if filters:
@@ -81,7 +81,7 @@ def update_data_and_chart(apply_clicks, reset_clicks, product_name, generic_name
                 generic_name=filters.get('generic_name'),
                 manufacturer=filters.get('manufacturer'),
                 brand_generic_type=filters.get('brand_generic_type'),
-                year_range=filters.get('year_range'),
+                year_filter=filters.get('year_filter'),
                 specialty_filter=filters.get('specialty_filter')
             ).collect()
         else:
@@ -114,18 +114,14 @@ def update_data_and_chart(apply_clicks, reset_clicks, product_name, generic_name
      Output('generic-filter', 'value'),
      Output('manufacturer-filter', 'value'),
      Output('type-filter', 'value'),
-     Output('year-range-slider', 'value'),
+     Output('year-filter', 'value'),
      Output('specialty-filter', 'value')],
     Input('reset-filters-btn', 'n_clicks'),
     prevent_initial_call=True
 )
 def reset_filters(n_clicks):
     """Reset all filter values to their defaults"""
-    # Get min/max years for slider reset
-    from UI.select import get_min_and_max_years
-    min_year, max_year = get_min_and_max_years()
-    
-    return None, None, None, None, (min_year, max_year), "All"
+    return None, None, None, None, None, "All"
 
 # Modal callbacks
 @callback(

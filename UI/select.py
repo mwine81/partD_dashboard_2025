@@ -28,21 +28,19 @@ def create_dropdown(col_name: str, label: str, component_id: str) -> dmc.MultiSe
         style={"minWidth": "200px"}
     )
 
-def create_year_slider() -> dmc.Stack:
+def create_year_filter() -> dmc.MultiSelect:
     min_year, max_year = get_min_and_max_years()
-    return dmc.Stack([
-        dmc.Text("Year Range", size="sm", fw="bold"),
-        dmc.RangeSlider(
-            id="year-range-slider",
-            min=min_year,
-            max=max_year,
-            step=1,
-            value=(min_year, max_year),
-            marks=[{"value": year, "label": str(year)} for year in range(min_year, max_year + 1, 2)],
-            size="md",
-            style={"minWidth": "300px"}
-        )
-    ], gap="xs")
+    year_options = [str(year) for year in range(min_year, max_year + 1)]
+    return dmc.MultiSelect(
+        data=year_options,
+        value=None,  # No filter by default
+        label="Year Selection",
+        id="year-filter",
+        placeholder="Select years (leave empty for all years)...",
+        searchable=True,
+        clearable=True,
+        style={"minWidth": "200px"}
+    )
 
 def create_specialty_filter() -> dmc.Stack:
     return dmc.Stack([
@@ -98,9 +96,9 @@ def create_filters() -> dmc.Paper:
                     create_dropdown("Brand_vs_Generic", "Brand/Generic", "type-filter")
                 ], span=4),
                 
-                # Year Range Slider
+                # Year Filter
                 dmc.GridCol([
-                    create_year_slider()
+                    create_year_filter()
                 ], span=4),
                 
                 # Specialty Drug Filter
