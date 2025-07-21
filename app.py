@@ -132,7 +132,7 @@ def update_data_and_chart(apply_clicks, reset_clicks, product_name, generic_name
         # Reset filters if reset button was clicked
         if ctx and ctx.triggered and 'reset-filters-btn' in ctx.triggered[0]['prop_id']:
             # Load all data when reset
-            filtered_data = load_data().collect()
+            filtered_data = load_data().collect(engine='streaming')
         else:
             # Build filters dictionary
             filters = build_filters_dict(product_name, generic_name, manufacturer, 
@@ -147,11 +147,11 @@ def update_data_and_chart(apply_clicks, reset_clicks, product_name, generic_name
                     brand_generic_type=filters.get('brand_generic_type'),
                     year_filter=filters.get('year_filter'),
                     specialty_filter=filters.get('specialty_filter')
-                ).collect()
+                ).collect(engine='streaming')
             else:
                 # No filters applied, load all data
-                filtered_data = load_data().collect()
-        
+                filtered_data = load_data().collect(engine='streaming')
+
         # Check if data exists
         if filtered_data.height == 0:
             # Return empty data with helpful message
@@ -265,7 +265,7 @@ def download_csv(n_clicks, row_data):
             filename = f"medicare_partd_filtered_{pd.Timestamp.now().strftime('%Y%m%d_%H%M%S')}.csv"
         else:
             # Fallback to loading all data if no grid data
-            df = load_data().collect()
+            df = load_data().collect(engine='streaming')
             df_pandas = df.to_pandas()
             
             current_time = pd.Timestamp.now().strftime("%Y-%m-%d %H:%M:%S")

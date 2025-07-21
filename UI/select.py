@@ -8,13 +8,13 @@ from helpers import load_data
 
 def load_choices(col_name: str) -> list:
     data = load_data()
-    choices = data.select(cs.matches(f'(?i){col_name}').unique().sort()).collect().to_series().to_list()
+    choices = data.select(cs.matches(f'(?i){col_name}').unique().sort()).collect(engine='streaming').to_series().to_list()
     return choices
 
 def get_min_and_max_years() -> tuple:
     data = load_data()
-    min_year = data.select(c("YEAR").min()).collect().item()
-    max_year = data.select(c("YEAR").max()).collect().item()
+    min_year = data.select(c("YEAR").min()).collect(engine='streaming').item()
+    max_year = data.select(c("YEAR").max()).collect(engine='streaming').item()
     return min_year, max_year
 
 def create_dropdown(col_name: str, label: str, component_id: str) -> dmc.MultiSelect:
