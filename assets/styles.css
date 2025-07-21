@@ -25,6 +25,40 @@
     --light-gradient: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
 }
 
+/* Social Media Icons Hover Effects */
+.mantine-ActionIcon-root {
+    transition: all 0.3s ease !important;
+}
+
+.mantine-ActionIcon-root:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Logo hover effect */
+a[title*="46brooklyn"] img:hover {
+    opacity: 0.8 !important;
+    transform: scale(1.02) !important;
+}
+
+/* Footer styling */
+.footer-social-icons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.footer-social-icons .mantine-ActionIcon-root {
+    border-radius: 50% !important;
+    background-color: transparent !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+.footer-social-icons .mantine-ActionIcon-root:hover {
+    background-color: var(--background-primary) !important;
+    border-color: var(--accent-color) !important;
+}
+
 /* Reset and Base Styles */
 * {
     box-sizing: border-box;

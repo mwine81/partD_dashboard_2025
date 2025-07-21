@@ -14,13 +14,21 @@ def header():
                                 # Left Side - Logo and Branding
                                 dmc.Group(
                                     [
-                                        html.Img(
-                                            src=get_asset_url("logo2.png"),
-                                            style={
-                                                "height": "60px",
-                                                "width": "auto",
-                                                "objectFit": "contain"
-                                            }
+                                        dmc.Anchor(
+                                            html.Img(
+                                                src=get_asset_url("logo2.png"),
+                                                style={
+                                                    "height": "60px",
+                                                    "width": "auto",
+                                                    "objectFit": "contain",
+                                                    "cursor": "pointer",
+                                                    "transition": "opacity 0.2s ease"
+                                                },
+                                                title="Visit 46brooklyn Research - Click to open in new tab"
+                                            ),
+                                            href="https://www.46brooklyn.com/",
+                                            target="_blank",
+                                            style={"textDecoration": "none"}
                                         ),
                                         dmc.Stack(
                                             [
