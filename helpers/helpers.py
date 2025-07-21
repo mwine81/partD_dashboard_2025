@@ -4,11 +4,25 @@ import polars.selectors as cs
 from pathlib import Path
 from typing import Optional, List, Tuple
 
+def standardize_type() -> pl.Expr:
+    """Standardize the type of a column for consistent filtering."""
+    return (
+        pl.when(cs.matches('(?i)brand').str.contains('(?i)gen'))
+        .then(pl.lit("Generic"))
+        .when(cs.matches('(?i)brand').str.contains('(?i)brand'))
+        .then(pl.lit("Brand"))
+        .when(cs.matches('(?i)brand').str.contains('(?i)dme'))
+        .then(pl.lit("DME"))
+        .when(cs.matches('(?i)brand').str.contains('(?i)vac'))
+        .then(pl.lit("Vaccine"))
+        .otherwise(pl.lit("Other"))
+    ).alias('Brand_vs_Generic')
+
 def load_data():
-    data_path = Path(__file__).parent / "data" / "partd.parquet"
+    data_path = Path("data/partd.parquet")
     if not data_path.exists():
         raise FileNotFoundError(f"Data file not found: {data_path}")
-    return pl.scan_parquet(data_path)
+    return pl.scan_parquet(data_path).with_columns(standardize_type())
 
 def load_filtered_data(
     product_name: Optional[List[str]] = None,
@@ -81,5 +95,5 @@ def get_filtered_data_for_grid(filters: dict) -> List[dict]:
     
     return query.collect().to_dicts()
 
-if __name__ == "__main__":
-    pass
+if __name__ == "__main__":  
+    load_data().select(c.Brand_vs_Generic).unique().collect().glimpse()

@@ -19,7 +19,7 @@ def layout():
         ModalContent.how_to_use_modal_content(),
         ModalContent.key_insights_modal_content(),
         ModalContent.data_sources_modal_content(),
-        create_filters(),
+       
         
 
         # Chart Section - Professional Header
@@ -27,7 +27,7 @@ def layout():
 
         # Chart Container
         ChartComponent.create_chart_container(),
-        
+         create_filters(),
         # Data Table Section - Professional Header with Download
         GridComponent.create_grid_header(),
         

@@ -4,14 +4,15 @@ from polars import col as c
 import polars.selectors as cs
 from pathlib import Path
 from dash_iconify import DashIconify
+from helpers import load_data
 
 def load_choices(col_name: str) -> list:
-    data = pl.scan_parquet(Path("data/partd.parquet"))
+    data = load_data()
     choices = data.select(cs.matches(f'(?i){col_name}').unique().sort()).collect().to_series().to_list()
     return choices
 
 def get_min_and_max_years() -> tuple:
-    data = pl.scan_parquet(Path("data/partd.parquet"))
+    data = load_data()
     min_year = data.select(c("YEAR").min()).collect().item()
     max_year = data.select(c("YEAR").max()).collect().item()
     return min_year, max_year
@@ -61,22 +62,41 @@ def create_specialty_filter() -> dmc.Stack:
 def create_filters() -> dmc.Paper:
     return dmc.Paper([
         dmc.Stack([
-            # Filter Header
+            # Filter Header with Status
             dmc.Group([
                 dmc.Group([
                     DashIconify(icon="tabler:filter", width=20, color="#1a365d"),
                     dmc.Text("Data Filters", size="lg", fw="bold", style={"color": "#1a365d"})
                 ], gap="xs"),
-                dmc.Button(
-                    [DashIconify(icon="tabler:refresh", width=16), "Reset Filters"],
-                    variant="outline",
-                    color="gray",
-                    size="sm",
-                    id="reset-filters-btn"
-                )
+                dmc.Group([
+                    dmc.Badge(
+                        "Filters Active",
+                        id="filter-status-badge", 
+                        color="orange", 
+                        variant="light",
+                        style={"display": "none"}  # Hidden by default
+                    ),
+                    dmc.Button(
+                        [DashIconify(icon="tabler:refresh", width=16), "Reset Filters"],
+                        variant="outline",
+                        color="gray",
+                        size="sm",
+                        id="reset-filters-btn"
+                    )
+                ], gap="sm")
             ], justify="space-between", align="center"),
             
             dmc.Divider(),
+            
+            # User guidance
+            dmc.Alert(
+                [
+                    DashIconify(icon="tabler:info-circle", width=16),
+                    " Select filters below to narrow your data analysis. Leave empty to view all data."
+                ],
+                color="blue",
+                variant="light"
+            ),
             
             # Filter Controls
             dmc.Grid([
@@ -107,17 +127,34 @@ def create_filters() -> dmc.Paper:
                 ], span=4),
             ], gutter="md"),
             
-            # Apply Filters Button
+            # Apply Filters Button with enhanced styling
             dmc.Group([
                 dmc.Button(
                     [DashIconify(icon="tabler:search", width=16), "Apply Filters"],
                     id="apply-filters-btn",
                     variant="filled",
-                    color="blue",
                     size="md",
-                    style={"backgroundColor": "#1a365d"}
+                    style={
+                        "backgroundColor": "#1a365d",
+                        "border": "2px solid #1a365d",
+                        "transition": "all 0.2s ease"
+                    },
+                    fullWidth=False
+                ),
+                dmc.Tooltip(
+                    label="Charts and tables update automatically when you apply filters",
+                    position="top",
+                    withArrow=True,
+                    children=[
+                        DashIconify(
+                            icon="tabler:info-circle", 
+                            width=20, 
+                            color="#718096",
+                            style={"cursor": "help", "marginLeft": "8px"}
+                        )
+                    ]
                 )
-            ], justify="center", mt="md")
+            ], justify="center", align="center", gap="xs", mt="md")
         ], gap="md")
     ], 
     p="lg", 
@@ -126,7 +163,8 @@ def create_filters() -> dmc.Paper:
     mb="lg",
     style={
         "border": "1px solid #e2e8f0",
-        "boxShadow": "0 1px 3px rgba(0, 0, 0, 0.05)"
+        "boxShadow": "0 1px 3px rgba(0, 0, 0, 0.05)",
+        "transition": "all 0.2s ease"
     })
 
 

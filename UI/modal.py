@@ -81,22 +81,79 @@ class ModalContent:
                             size="sm",
                             fw="bold",
                         ),
-                        dmc.List(
-                            [
-                                dmc.ListItem("Use the data table below to filter and sort drugs by various criteria"),
-                                dmc.ListItem("The chart automatically updates to show trends for your selected data"),
-                                dmc.ListItem("Click column headers in the table to sort by different metrics"),
-                                dmc.ListItem("Use the search and filter options to focus on specific drugs or categories"),
-                                dmc.ListItem("Download filtered data as CSV using the 'Download CSV' button in the table header"),
-                                dmc.ListItem("Export chart images using the toolbar in the top-right of the chart"),
-                            ],
-                            size="sm",
-                        ),
+                        
+                        # Step-by-step guide
+                        dmc.Paper([
+                            dmc.Stack([
+                                dmc.Group([
+                                    DashIconify(icon="tabler:list-numbers", width=20, color="#1a365d"),
+                                    dmc.Text("Step-by-Step Guide", fw="bold", style={"color": "#1a365d"})
+                                ], gap="xs"),
+                                
+                                dmc.Timeline([
+                                    dmc.TimelineItem([
+                                        dmc.Text("Use the filter controls to narrow down your data", fw="bold", size="sm"),
+                                        dmc.Text("Select products, manufacturers, years, or drug types to focus your analysis", size="xs", c="gray")
+                                    ], title="🔍 Step 1: Apply Filters"),
+                                    
+                                    dmc.TimelineItem([
+                                        dmc.Text("View results in the interactive data table", fw="bold", size="sm"),
+                                        dmc.Text("Sort columns, use built-in filters, and select rows for detailed analysis", size="xs", c="gray")
+                                    ], title="📊 Step 2: Explore Data"),
+                                    
+                                    dmc.TimelineItem([
+                                        dmc.Text("Analyze trends in the dynamic chart", fw="bold", size="sm"),
+                                        dmc.Text("Chart automatically updates to show spending patterns for your filtered data", size="xs", c="gray")
+                                    ], title="📈 Step 3: View Trends"),
+                                    
+                                    dmc.TimelineItem([
+                                        dmc.Text("Export your results", fw="bold", size="sm"),
+                                        dmc.Text("Download filtered data as CSV or export chart images for reports", size="xs", c="gray")
+                                    ], title="💾 Step 4: Export Data"),
+                                ], active=0, color="blue")
+                            ], gap="md")
+                        ], p="md", withBorder=True, radius="md", style={"backgroundColor": "#f8fafc"}),
+                        
+                        # Quick tips
+                        dmc.Stack([
+                            dmc.Group([
+                                DashIconify(icon="tabler:lightbulb", width=20, color="#ed8936"),
+                                dmc.Text("Pro Tips", fw="bold", style={"color": "#ed8936"})
+                            ], gap="xs"),
+                            
+                            dmc.List([
+                                dmc.ListItem([
+                                    dmc.Text("💡 ", span=True, style={"fontSize": "1.1rem"}),
+                                    "Try filtering by specialty drugs to see high-cost medication trends"
+                                ]),
+                                dmc.ListItem([
+                                    dmc.Text("🔄 ", span=True, style={"fontSize": "1.1rem"}),
+                                    "Use the 'Reset Filters' button to quickly return to viewing all data"
+                                ]),
+                                dmc.ListItem([
+                                    dmc.Text("📋 ", span=True, style={"fontSize": "1.1rem"}),
+                                    "Click column headers in the table to sort by different metrics"
+                                ]),
+                                dmc.ListItem([
+                                    dmc.Text("🖼️ ", span=True, style={"fontSize": "1.1rem"}),
+                                    "Use the chart toolbar (top-right) to export high-quality images"
+                                ]),
+                                dmc.ListItem([
+                                    dmc.Text("🔍 ", span=True, style={"fontSize": "1.1rem"}),
+                                    "If no data appears, try broadening your filter selection"
+                                ]),
+                            ], size="sm")
+                        ], gap="xs"),
+                        
                         dmc.Alert(
-                            "Pro Tip: Try filtering by drug type or specialty status to see how different categories contribute to overall spending trends.",
-                            title="Getting Started",
+                            [
+                                dmc.Text("🚀 ", span=True, style={"fontSize": "1.2rem"}),
+                                dmc.Text("Getting Started: ", fw="bold", span=True),
+                                "Start by exploring a specific drug type or manufacturer to see focused spending patterns, then compare with other selections!"
+                            ],
+                            title="Quick Start Recommendation",
                             color="blue",
-                            icon=DashIconify(icon="tabler:lightbulb"),
+                            variant="light",
                         ),
                     ],
                     gap="md",

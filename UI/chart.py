@@ -43,20 +43,27 @@ class ChartComponent:
     def create_chart_container():
         return html.Div(
             [
-                dcc.Graph(
-                    id='fig',
-                    config={
-                        'displayModeBar': True,
-                        'displaylogo': False,
-                        'modeBarButtonsToRemove': ['pan2d', 'lasso2d', 'select2d'],
-                        'toImageButtonOptions': {
-                            'format': 'png',
-                            'filename': 'medicare_partd_spending_trends',
-                            'height': 600,
-                            'width': 1000,
-                            'scale': 2
-                        }
-                    }
+                dcc.Loading(
+                    id="loading-chart",
+                    type="cube",
+                    color="#1a365d",
+                    children=[
+                        dcc.Graph(
+                            id='fig',
+                            config={
+                                'displayModeBar': True,
+                                'displaylogo': False,
+                                'modeBarButtonsToRemove': ['pan2d', 'lasso2d', 'select2d'],
+                                'toImageButtonOptions': {
+                                    'format': 'png',
+                                    'filename': 'medicare_partd_spending_trends',
+                                    'height': 600,
+                                    'width': 1000,
+                                    'scale': 2
+                                }
+                            }
+                        )
+                    ]
                 )
             ],
             className="partd-chart-container",

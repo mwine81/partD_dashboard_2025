@@ -1,5 +1,6 @@
 import dash_mantine_components as dmc
 from dash_iconify import DashIconify
+from dash import dcc
 import dash_ag_grid as dag
 from grid.ag_grid_definition import columnDefs
 
@@ -28,18 +29,25 @@ class GridComponent:
                                 ),
                                 dmc.Group(
                                     [
-                                        dmc.Badge("Filter & Sort", color="orange", variant="light"),
-                                        dmc.Button(
-                                            [
-                                                DashIconify(icon="tabler:download", width=16),
-                                                "Download CSV"
-                                            ],
-                                            variant="light",
-                                            color="gray",
-                                            size="sm",
-                                            id="download-button",
-                                            style={"color": "white", "backgroundColor": "rgba(255,255,255,0.2)"},
-                                        ),
+                                        dmc.Badge("Interactive Table", color="orange", variant="light"),
+                                        dmc.Group([
+                                            dmc.Button(
+                                                [
+                                                    DashIconify(icon="tabler:download", width=16),
+                                                    "CSV"
+                                                ],
+                                                variant="light",
+                                                color="gray",
+                                                size="sm",
+                                                id="download-button",
+                                                style={"color": "white", "backgroundColor": "rgba(255,255,255,0.2)"},
+                                            ),
+                                            dmc.Tooltip(
+                                                "Download current filtered data as CSV",
+                                                label="CSV Export",
+                                                position="bottom"
+                                            )
+                                        ], gap="xs")
                                     ],
                                     gap="sm",
                                 ),
@@ -60,25 +68,32 @@ class GridComponent:
     def create_grid_container():
         """Create the AG Grid container with dynamic data"""
         return dmc.Paper([
-            dag.AgGrid(
-                id="ag-grid",
-                rowData=[],  # Will be populated by callback
-                columnDefs=columnDefs,
-                className="ag-theme-alpine",
-                style={"height": "600px"},
-                dashGridOptions={
-                    "pagination": True,
-                    "paginationPageSize": 20,
-                    "domLayout": "normal",
-                    "defaultColDef": {
-                        "resizable": True,
-                        "sortable": True,
-                        "filter": True,
-                    },
-                    "enableRangeSelection": True,
-                    "suppressExcelExport": False,
-                    "rowSelection": "multiple",
-                }
+            dcc.Loading(
+                id="loading-grid",
+                type="dot",
+                color="#1a365d",
+                children=[
+                    dag.AgGrid(
+                        id="ag-grid",
+                        rowData=[],  # Will be populated by callback
+                        columnDefs=columnDefs,
+                        className="ag-theme-alpine",
+                        style={"height": "600px"},
+                        dashGridOptions={
+                            "pagination": True,
+                            "paginationPageSize": 20,
+                            "domLayout": "normal",
+                            "defaultColDef": {
+                                "resizable": True,
+                                "sortable": True,
+                                "filter": True,
+                            },
+                            "enableRangeSelection": True,
+                            "suppressExcelExport": False,
+                            "rowSelection": "multiple",
+                        }
+                    )
+                ]
             )
         ], className="brooklyn-card", style={"marginTop": 0, "paddingTop": 0})
 
