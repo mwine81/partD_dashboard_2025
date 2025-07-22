@@ -95,5 +95,23 @@ def get_filtered_data_for_grid(filters: dict) -> List[dict]:
     
     return query.collect().to_dicts()
 
+# Helper function to build filters dictionary
+def build_filters_dict(product_name, generic_name, manufacturer, brand_generic_type, year_filter, specialty_filter):
+    """Build filters dictionary from callback inputs"""
+    filters = {}
+    if product_name:
+        filters['product_name'] = product_name
+    if generic_name:
+        filters['generic_name'] = generic_name
+    if manufacturer:
+        filters['manufacturer'] = manufacturer
+    if brand_generic_type:
+        filters['brand_generic_type'] = brand_generic_type
+    if year_filter:
+        filters['year_filter'] = year_filter
+    if specialty_filter and specialty_filter != "All":
+        filters['specialty_filter'] = specialty_filter
+    return filters
+
 if __name__ == "__main__":  
     load_data().select(c.Brand_vs_Generic).unique().collect().glimpse()

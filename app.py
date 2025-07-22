@@ -10,8 +10,8 @@ from dash import Dash, Input, Output, State, callback, callback_context
 import polars as pl
 import pandas as pd
 from dash.exceptions import PreventUpdate
-from figures.figure import create_partd_figure, aggregate_chart_data
-from helpers import load_data, load_filtered_data
+from figures.figure import create_partd_figure, aggregate_chart_data, create_error_figure, create_no_data_figure
+from helpers import load_data, load_filtered_data, build_filters_dict
 from UI.layout import layout
 
 
@@ -25,87 +25,6 @@ server = app.server
 
 app.layout = dmc.MantineProvider(layout())
 
-# Helper function to build filters dictionary
-def build_filters_dict(product_name, generic_name, manufacturer, brand_generic_type, year_filter, specialty_filter):
-    """Build filters dictionary from callback inputs"""
-    filters = {}
-    if product_name:
-        filters['product_name'] = product_name
-    if generic_name:
-        filters['generic_name'] = generic_name
-    if manufacturer:
-        filters['manufacturer'] = manufacturer
-    if brand_generic_type:
-        filters['brand_generic_type'] = brand_generic_type
-    if year_filter:
-        filters['year_filter'] = year_filter
-    if specialty_filter and specialty_filter != "All":
-        filters['specialty_filter'] = specialty_filter
-    return filters
-
-def create_no_data_figure(message="No data found for current selection"):
-    """Create an informative figure when no data is available"""
-    import plotly.graph_objects as go
-    
-    figure = go.Figure()
-    figure.update_layout(
-        title={
-            'text': message,
-            'x': 0.5,
-            'xanchor': 'center',
-            'font': {'size': 18, 'color': '#1a365d'}
-        },
-        xaxis_title="Year",
-        yaxis_title="Total Spending",
-        plot_bgcolor='white',
-        paper_bgcolor='#f8fafc',
-        height=600,
-        annotations=[{
-            'text': '💡 Try adjusting your filters to see data<br>or reset filters to view all data',
-            'xref': 'paper',
-            'yref': 'paper',
-            'x': 0.5,
-            'y': 0.5,
-            'xanchor': 'center',
-            'yanchor': 'middle',
-            'showarrow': False,
-            'font': {'size': 16, 'color': '#718096'},
-            'align': 'center'
-        }]
-    )
-    return figure
-
-def create_error_figure(error_message="An error occurred while loading data"):
-    """Create an informative figure when an error occurs"""
-    import plotly.graph_objects as go
-    
-    figure = go.Figure()
-    figure.update_layout(
-        title={
-            'text': 'Error Loading Data',
-            'x': 0.5,
-            'xanchor': 'center',
-            'font': {'size': 18, 'color': '#e53e3e'}
-        },
-        xaxis_title="Year",
-        yaxis_title="Total Spending",
-        plot_bgcolor='white',
-        paper_bgcolor='#f8fafc',
-        height=600,
-        annotations=[{
-            'text': f'⚠️ {error_message}<br>Please try again or contact support',
-            'xref': 'paper',
-            'yref': 'paper',
-            'x': 0.5,
-            'y': 0.5,
-            'xanchor': 'center',
-            'yanchor': 'middle',
-            'showarrow': False,
-            'font': {'size': 16, 'color': '#e53e3e'},
-            'align': 'center'
-        }]
-    )
-    return figure
 
 # Main callback to update both grid and figure based on filters
 @callback(
@@ -296,18 +215,18 @@ def download_csv(n_clicks, row_data):
         
         # Return helpful error file
         error_content = f"""# Medicare Part D Data Export - Error Report
-# Generated: {pd.Timestamp.now().strftime("%Y-%m-%d %H:%M:%S")}
-# Status: Export Failed
-# Error: {str(e)}
-#
-# Please try the following:
-# 1. Refresh the page and try again
-# 2. Check your internet connection
-# 3. Contact support if the problem persists
-#
-# Error Details:
-{str(e)}
-"""
+                # Generated: {pd.Timestamp.now().strftime("%Y-%m-%d %H:%M:%S")}
+                # Status: Export Failed
+                # Error: {str(e)}
+                #
+                # Please try the following:
+                # 1. Refresh the page and try again
+                # 2. Check your internet connection
+                # 3. Contact support if the problem persists
+                #
+                # Error Details:
+                {str(e)}
+                """
         return dict(
             content=error_content,
             filename=f"export_error_{pd.Timestamp.now().strftime('%Y%m%d_%H%M%S')}.txt",
